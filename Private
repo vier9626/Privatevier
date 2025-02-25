@@ -1,5 +1,8 @@
--- Skidded
-
+-- // Tables
+--[[ Credits
+    Matas#3535 @matas - Created UI
+    bored#9316 @wally hub user - Helped make library
+]]
 -- // Variables
 local ws = game:GetService("Workspace")
 local uis = game:GetService("UserInputService")
@@ -23,29 +26,29 @@ local library = {
         configs = "splix/configs"
     },
     shared = {
-        initialized = true,
+        initialized = false,
         fps = 0,
         ping = 0
     }
 }
-
+--
 if not isfolder(library.folders.main) then
     makefolder(library.folders.main)
 end
-
+--
 if not isfolder(library.folders.assets) then
     makefolder(library.folders.assets)
 end
-
+--
 if not isfolder(library.folders.configs) then
     makefolder(library.folders.configs)
 end
-
+--
 local utility = {}
 local pages = {}
 local sections = {}
-
 -- Theme Variables
+--local themes = {}
 local theme = {
     accent = Color3.fromRGB(50, 100, 255),
     light_contrast = Color3.fromRGB(30, 30, 30),
@@ -58,50 +61,55 @@ local theme = {
     font = 2,
     textsize = 13
 }
-
--- Utility Functions
+-- // Utility Functions
 do
-    function utility:Size(xScale, xOffset, yScale, yOffset, instance)
+    function utility:Size(xScale,xOffset,yScale,yOffset,instance)
         if instance then
-            local x = xScale * instance.Size.x + xOffset
-            local y = yScale * instance.Size.y + yOffset
-            return Vector2.new(x, y)
+            local x = xScale*instance.Size.x+xOffset
+            local y = yScale*instance.Size.y+yOffset
+            --
+            return Vector2.new(x,y)
         else
-            local vx, vy = ws.CurrentCamera.ViewportSize.x, ws.CurrentCamera.ViewportSize.y
-            local x = xScale * vx + xOffset
-            local y = yScale * vy + yOffset
-            return Vector2.new(x, y)
+            local vx,vy = ws.CurrentCamera.ViewportSize.x,ws.CurrentCamera.ViewportSize.y
+            --
+            local x = xScale*vx+xOffset
+            local y = yScale*vy+yOffset
+            --
+            return Vector2.new(x,y)
         end
     end
-
-    function utility:Position(xScale, xOffset, yScale, yOffset, instance)
+    --
+    function utility:Position(xScale,xOffset,yScale,yOffset,instance)
         if instance then
-            local x = instance.Position.x + xScale * instance.Size.x + xOffset
-            local y = instance.Position.y + yScale * instance.Size.y + yOffset
-            return Vector2.new(x, y)
+            local x = instance.Position.x+xScale*instance.Size.x+xOffset
+            local y = instance.Position.y+yScale*instance.Size.y+yOffset
+            --
+            return Vector2.new(x,y)
         else
-            local vx, vy = ws.CurrentCamera.ViewportSize.x, ws.CurrentCamera.ViewportSize.y
-            local x = xScale * vx + xOffset
-            local y = yScale * vy + yOffset
-            return Vector2.new(x, y)
+            local vx,vy = ws.CurrentCamera.ViewportSize.x,ws.CurrentCamera.ViewportSize.y
+            --
+            local x = xScale*vx+xOffset
+            local y = yScale*vy+yOffset
+            --
+            return Vector2.new(x,y)
         end
     end
-
-    function utility:Create(instanceType, instanceOffset, instanceProperties, instanceParent)
+    --
+	function utility:Create(instanceType, instanceOffset, instanceProperties, instanceParent)
         local instanceType = instanceType or "Frame"
-        local instanceOffset = instanceOffset or { Vector2.new(0, 0) }
+        local instanceOffset = instanceOffset or {Vector2.new(0,0)}
         local instanceProperties = instanceProperties or {}
         local instanceHidden = false
         local instance = nil
-
-        if instanceType == "Frame" or instanceType == "frame" then
+        --
+		if instanceType == "Frame" or instanceType == "frame" then
             local frame = Drawing.new("Square")
             frame.Visible = true
             frame.Filled = true
             frame.Thickness = 0
-            frame.Color = Color3.fromRGB(255, 255, 255)
-            frame.Size = Vector2.new(100, 100)
-            frame.Position = Vector2.new(0, 0)
+            frame.Color = Color3.fromRGB(255,255,255)
+            frame.Size = Vector2.new(100,100)
+            frame.Position = Vector2.new(0,0)
             frame.ZIndex = 50
             frame.Transparency = library.shared.initialized and 1 or 0
             instance = frame
@@ -111,7 +119,7 @@ do
             text.Visible = true
             text.Outline = true
             text.Center = false
-            text.Color = Color3.fromRGB(255, 255, 255)
+            text.Color = Color3.fromRGB(255,255,255)
             text.ZIndex = 50
             text.Transparency = library.shared.initialized and 1 or 0
             instance = text
@@ -120,14 +128,14 @@ do
             frame.Visible = true
             frame.Filled = true
             frame.Thickness = 0
-            frame.Color = Color3.fromRGB(255, 255, 255)
+            frame.Color = Color3.fromRGB(255,255,255)
             frame.ZIndex = 50
             frame.Transparency = library.shared.initialized and 1 or 0
             instance = frame
         elseif instanceType == "Image" or instanceType == "image" then
             local image = Drawing.new("Image")
-            image.Size = Vector2.new(12, 19)
-            image.Position = Vector2.new(0, 0)
+            image.Size = Vector2.new(12,19)
+            image.Position = Vector2.new(0,0)
             image.Visible = true
             image.ZIndex = 50
             image.Transparency = library.shared.initialized and 1 or 0
@@ -165,114 +173,6 @@ do
             line.Transparency = library.shared.initialized and 1 or 0
             instance = line
         end
-
-        if instance then
-            for i, v in pairs(instanceProperties) do
-                if i == "Hidden" or i == "hidden" then
-                    instanceHidden = true
-                else
-                    if library.shared.initialized then
-                        instance[i] = v
-                    else
-                        if i ~= "Transparency" then
-                            instance[i] = v
-                        end
-                    end
-                end
-            end
-
-            if not instanceHidden then
-                library.drawings[#library.drawings + 1] = { instance, instanceOffset, instanceProperties["Transparency"] or 1 }
-            else
-                library.hidden[#library.hidden + 1] = { instance }
-            end
-
-            if instanceParent then
-                instanceParent[#instanceParent + 1] = instance
-            end
-
-            return instance
-        end
-    end
-
-    function utility:UpdateOffset(instance, instanceOffset)
-        for i, v in pairs(library.drawings) do
-            if v[1] == instance then
-                v[2] = instanceOffset
-            end
-        end
-    end
-
-    function utility:UpdateTransparency(instance, instanceTransparency)
-        for i, v in pairs(library.drawings) do
-            if v[1] == instance then
-                v[3] = instanceTransparency
-            end
-        end
-    end
-
-    function utility:Remove(instance, hidden)
-        local ind = 0
-        for i, v in pairs(hidden and library.hidden or library.drawings) do
-            if v[1] == instance then
-                ind = i
-                if hidden then
-                    v[1] = nil
-                else
-                    v[2] = nil
-                    v[1] = nil
-                end
-            end
-        end
-
-        table.remove(hidden and library.hidden or library.drawings, ind)
-        instance:Remove()
-    end
-
-    function utility:GetSubPrefix(str)
-        local str = tostring(str):gsub(" ", "")
-        local var = ""
-
-        if #str == 2 then
-            local sec = string.sub(str, #str, #str + 1)
-            var = sec == "1" and "st" or sec == "2" and "nd" or sec == "3" and "rd" or "th"
-        end
-
-        return var
-    end
-
-    function utility:Connection(connectionType, connectionCallback)
-        local connection = connectionType:Connect(connectionCallback)
-        library.connections[#library.connections + 1] = connection
-        return connection
-    end
-
-    function utility:Disconnect(connection)
-        for i, v in pairs(library.connections) do
-            if v == connection then
-                library.connections[i] = nil
-                v:Disconnect()
-            end
-        end
-    end
-
-    function utility:MouseLocation()
-        return uis:GetMouseLocation()
-    end
-
-    function utility:MouseOverDrawing(values, valuesAdd)
-        local valuesAdd = valuesAdd or {}
-        local values = {
-            (values[1] or 0) + (valuesAdd[1] or 0),
-            (values[2] or 0) + (valuesAdd[2] or 0),
-            (values[3] or 0) + (valuesAdd[3] or 0),
-            (values[4] or 0) + (valuesAdd[4] or 0)
-        }
-
-        local mouseLocation = utility:MouseLocation()
-        return (mouseLocation.x >= values[1] and mouseLocation.x <= (values[1] + (values[3] - values[1]))) and (mouseLocation.y >= values[2] and mouseLocation.y <= (values[2] + (values[4] - values[2])))
-    end
-end
         --
         if instance then
             for i, v in pairs(instanceProperties) do
@@ -309,6 +209,7 @@ end
             --
             return instance
         end
+	end
     --
     function utility:UpdateOffset(instance, instanceOffset)
         for i,v in pairs(library.drawings) do
@@ -328,6 +229,7 @@ end
     --
     function utility:Remove(instance, hidden)
         local ind = 0
+        --
         for i,v in pairs(hidden and library.hidden or library.drawings) do
             if v[1] == instance then
                 ind = i
@@ -460,6 +362,7 @@ end
         for z,x in pairs(table2) do table3[z + t] = x end
         return table3
     end
+end
 -- // Library Functions
 do
     library.__index = library
@@ -4129,3 +4032,10 @@ end
 end]]
 --
 return library, utility, library.pointers, theme
+-- // Init
+
+local Window = Library:New({Name = "Private UI", Accent = Color3.fromRGB(25, 240, 100)})
+--
+
+-- // Initialisation
+Window:Initialize()
