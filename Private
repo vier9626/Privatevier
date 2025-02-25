@@ -26,9 +26,9 @@ local library = {
         configs = "splix/configs"
     },
     shared = {
-        initialized = false,
-        fps = 0,
-        ping = 0
+        initialized = true,
+        fps = 60,
+        ping = 10
     }
 }
 --
