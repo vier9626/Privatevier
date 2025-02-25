@@ -11,28 +11,6 @@ local hs = game:GetService("HttpService")
 local plrs = game:GetService("Players")
 local stats = game:GetService("Stats")
 
--- กำหนดให้การอัปเดต UI ทุกๆ 30-60 มิลลิวินาที
-local updateInterval = 50 -- ความถี่ในการอัปเดต (มิลลิวินาที)
-local lastUpdate = tick()
-
--- ฟังก์ชันสำหรับอัปเดต UI
-function updateUI()
-    -- โค้ดสำหรับอัปเดต UI ของคุณที่นี่
-end
-
-game:GetService("RunService").RenderStepped:Connect(function()
-    if tick() - lastUpdate >= updateInterval / 1000 then
-        updateUI()
-        lastUpdate = tick()
-    end
-end)
-
--- ปรับปรุงความลื่นของ UI โดยการใช้การหน่วงเวลา (sleep)
-function smoothUpdate()
-    -- เพิ่มฟังก์ชันที่ใช้หน่วงเวลา เพื่อให้ UI ราบรื่นขึ้น
-    task.wait(updateInterval / 1000)
-end
-
 -- UI Variables
 local library = {
     drawings = {},
@@ -48,9 +26,9 @@ local library = {
         configs = "splix/configs"
     },
     shared = {
-        initialized = false,
-        fps = 0,
-        ping = 0
+        initialized = true,
+        fps = 60,
+        ping = 10
     }
 }
 --
