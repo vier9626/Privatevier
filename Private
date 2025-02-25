@@ -1,4 +1,3 @@
--- // Tables
 --[[ Credits
     Matas#3535 @matas - Created UI
     bored#9316 @wally hub user - Helped make library
@@ -10,7 +9,6 @@ local rs = game:GetService("RunService")
 local hs = game:GetService("HttpService")
 local plrs = game:GetService("Players")
 local stats = game:GetService("Stats")
-
 -- UI Variables
 local library = {
     drawings = {},
@@ -4032,10 +4030,3 @@ end
 end]]
 --
 return library, utility, library.pointers, theme
--- // Init
-
-local Window = Library:New({Name = "Private UI", Accent = Color3.fromRGB(25, 240, 100)})
---
-
--- // Initialisation
-Window:Initialize()
