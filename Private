@@ -309,7 +309,6 @@ end
             --
             return instance
         end
-	end
     --
     function utility:UpdateOffset(instance, instanceOffset)
         for i,v in pairs(library.drawings) do
@@ -329,7 +328,6 @@ end
     --
     function utility:Remove(instance, hidden)
         local ind = 0
-        --
         for i,v in pairs(hidden and library.hidden or library.drawings) do
             if v[1] == instance then
                 ind = i
@@ -462,7 +460,6 @@ end
         for z,x in pairs(table2) do table3[z + t] = x end
         return table3
     end
-end
 -- // Library Functions
 do
     library.__index = library
